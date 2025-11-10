@@ -14,6 +14,22 @@ body {
   margin-bottom: 50px;
 }
 
+.header-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.header-left {
+  text-align: left;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+}
+
 .title {
   font-size: 3em;
   color: #2f80ed;
@@ -60,4 +76,110 @@ body {
   margin-top: 80px;
   font-size: 0.9em;
   color: #999;
+}
+
+/* Simple nav to match existing style */
+.nav {
+  margin-top: 20px;
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.nav-link {
+  color: #bdbdbd;
+  text-decoration: none;
+  background: #1a1a1d;
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(47, 128, 237, 0.25);
+  transition: all 0.2s ease;
+}
+
+.nav-link:hover {
+  color: #ffffff;
+  border-color: rgba(47, 128, 237, 0.5);
+  box-shadow: 0 0 10px rgba(47, 128, 237, 0.3);
+}
+
+.nav-link.primary {
+  color: #ffffff;
+  background: #2f80ed;
+  border-color: #2f80ed;
+}
+
+.enroll-cta {
+  position: relative;
+}
+
+@media (max-width: 768px) {
+  .header-left {
+    text-align: center;
+  }
+  .header-row {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+/* Form styles */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-row label {
+  color: #bdbdbd;
+  font-size: 0.95em;
+}
+
+.form-row input,
+.form-row select,
+.form-row textarea {
+  background: #0f1114;
+  color: #f4f4f4;
+  border: 1px solid rgba(47, 128, 237, 0.35);
+  border-radius: 8px;
+  padding: 10px 12px;
+  outline: none;
+}
+
+.form-row input:focus,
+.form-row select:focus,
+.form-row textarea:focus {
+  border-color: #2f80ed;
+  box-shadow: 0 0 10px rgba(47, 128, 237, 0.3);
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 6px;
+}
+
+.button {
+  border: 1px solid rgba(47, 128, 237, 0.5);
+  background: #1a1a1d;
+  color: #f4f4f4;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.button:hover {
+  box-shadow: 0 0 10px rgba(47, 128, 237, 0.3);
+}
+
+.button.primary {
+  background: #2f80ed;
+  border-color: #2f80ed;
 }
