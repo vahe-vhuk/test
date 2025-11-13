@@ -1,18 +1,45 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-
-// The list now comes from the DataContext on the detail page,
-// but for this grid we can keep simple mock titles here or link to known IDs.
-const mockArticles = [
-  { id: "1", title: "Getting Started with C/C++", excerpt: "Your first steps into systems programming." },
-  { id: "2", title: "Demystifying Microcontrollers", excerpt: "From pins to peripherals, what you need to know." },
-  { id: "3", title: "Memory Management Essentials", excerpt: "Pointers, stacks, heaps—and how to avoid pitfalls." },
-];
+import { getArticles } from "../services/api";
 
 function Articles() {
+  const [articles, setArticles] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    let isMounted = true;
+    async function load() {
+      try {
+        setLoading(true);
+        setError("");
+        const list = await getArticles();
+        if (isMounted) setArticles(Array.isArray(list) ? list : []);
+      } catch (e) {
+        console.error("Failed to load articles:", e);
+        if (isMounted) setError(e?.message || "Failed to load articles");
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    }
+    load();
+    return () => { isMounted = false; };
+  }, []);
+
   return (
     <main className="main">
-      {mockArticles.map((article) => (
+      {loading && (
+        <section className="card" style={{ width: "100%", maxWidth: 700, textAlign: "left" }}>
+          <h2>Loading articles...</h2>
+        </section>
+      )}
+      {error && (
+        <section className="card" style={{ width: "100%", maxWidth: 700, textAlign: "left" }}>
+          <h2>Unable to load articles</h2>
+          <p style={{ color: "#bdbdbd" }}>{error}</p>
+        </section>
+      )}
+      {!loading && !error && articles.map((article) => (
         <Link
           key={article.id}
           to={`/articles/${article.id}`}
@@ -20,7 +47,7 @@ function Articles() {
           style={{ width: 320, textAlign: "left", textDecoration: "none" }}
         >
           <h2>{article.title}</h2>
-          <p>{article.excerpt}</p>
+          <p>{article.excerpt || article.summary}</p>
         </Link>
       ))}
     </main>

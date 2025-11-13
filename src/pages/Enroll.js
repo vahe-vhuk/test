@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
 import { DataContext } from "../context/DataContext";
+import { createEnrollment } from "../services/api";
 
 const courses = [
   { value: "", label: "Select a course" },
@@ -22,22 +23,53 @@ function Enroll() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   }
 
-  function handleSubmit(event) {
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
+  async function handleSubmit(event) {
     event.preventDefault();
-    // For now, just log the data
-    console.log("Enrollment submission:", formData);
-    setAnalytics((prev) => ({ ...prev, totalApplicants: prev.totalApplicants + 1 }));
-    alert("Thanks! Your enrollment info has been logged to the console.");
+    try {
+      setSubmitting(true);
+      setError("");
+      setSuccess("");
+      const payload = {
+        full_name: formData.fullName,
+        email: formData.email,
+        phone_number: formData.phone,
+        course: formData.course,
+        notes: formData.notes,
+      };
+      await createEnrollment(payload);
+      setAnalytics((prev) => ({ ...prev, totalApplicants: prev.totalApplicants + 1 }));
+      setSuccess("Thanks! Your enrollment has been submitted.");
+      setFormData({ fullName: "", email: "", course: "", phone: "", notes: "" });
+    } catch (e) {
+      console.error("Enrollment submit failed:", e);
+      setError(e?.message || "Failed to submit enrollment");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
     <main className="main" style={{ flexDirection: "column", alignItems: "center" }}>
-      <section className="card" style={{ maxWidth: 520, width: "100%", textAlign: "left" }}>
+      <section className="card" style={{ maxWidth: 640, width: "100%", textAlign: "left" }}>
         <h2>Enroll</h2>
         <p style={{ color: "#bdbdbd", marginBottom: 20 }}>
           Fill in your details and we’ll get back to you as soon as possible.
         </p>
         <form onSubmit={handleSubmit} className="form">
+          {error ? (
+            <div className="card" style={{ background: "#2a2a2a", borderColor: "#b00020", color: "#ffb4ab", marginBottom: 12 }}>
+              {error}
+            </div>
+          ) : null}
+          {success ? (
+            <div className="card" style={{ background: "#1b2b1b", borderColor: "#2e7d32", color: "#c8e6c9", marginBottom: 12 }}>
+              {success}
+            </div>
+          ) : null}
           <div className="form-row">
             <label htmlFor="fullName">Full Name</label>
             <input
@@ -47,6 +79,7 @@ function Enroll() {
               value={formData.fullName}
               onChange={handleChange}
               required
+              disabled={submitting}
             />
           </div>
           <div className="form-row">
@@ -58,6 +91,7 @@ function Enroll() {
               value={formData.email}
               onChange={handleChange}
               required
+              disabled={submitting}
             />
           </div>
           <div className="form-row">
@@ -68,6 +102,7 @@ function Enroll() {
               value={formData.course}
               onChange={handleChange}
               required
+              disabled={submitting}
             >
               {courses.map((c) => (
                 <option key={c.value} value={c.value}>
@@ -84,6 +119,7 @@ function Enroll() {
               type="text"
               value={formData.phone}
               onChange={handleChange}
+              disabled={submitting}
             />
           </div>
           <div className="form-row">
@@ -94,10 +130,13 @@ function Enroll() {
               rows="4"
               value={formData.notes}
               onChange={handleChange}
+              disabled={submitting}
             />
           </div>
           <div className="form-actions">
-            <button type="submit" className="button primary">Submit</button>
+            <button type="submit" className="button primary" disabled={submitting}>
+              {submitting ? "Submitting..." : "Submit"}
+            </button>
           </div>
         </form>
       </section>
