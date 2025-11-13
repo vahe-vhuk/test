@@ -59,18 +59,37 @@ function ArticleDetails() {
     );
   }
 
+  function formatDate(dateString) {
+    if (!dateString) return null;
+    try {
+      const date = new Date(dateString);
+      return date.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
+    } catch (e) {
+      return dateString;
+    }
+  }
+
+  const publishDate = article.publish_date || article.date;
+  const formattedDate = formatDate(publishDate);
+
   return (
     <main className="main" style={{ flexDirection: "column", alignItems: "center" }}>
       <section className="card" style={{ maxWidth: 900, width: "100%", textAlign: "left" }}>
         <h2>{article.title}</h2>
-        <p style={{ color: "#bdbdbd", marginTop: 8 }}>
-          {article.author ? `By ${article.author}` : null}
-          {article.date ? (article.author ? " • " : "") + article.date : null}
-        </p>
+        <div style={{ color: "#bdbdbd", marginTop: 8, marginBottom: 8 }}>
+          {article.author && <span>By {article.author}</span>}
+          {formattedDate && (
+            <span>{article.author ? " • " : ""}{formattedDate}</span>
+          )}
+        </div>
         <div
           className="article-content"
           style={{ marginTop: 16 }}
-          dangerouslySetInnerHTML={{ __html: article.content }}
+          dangerouslySetInnerHTML={{ __html: article.content || "" }}
         />
       </section>
     </main>

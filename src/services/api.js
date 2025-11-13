@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const apiBaseURL = process.env.REACT_APP_API_URL || "http://57.131.21.244/api/";
+const apiBaseURL = process.env.REACT_APP_API_URL;
 
 export const api = axios.create({
 	baseURL: apiBaseURL.replace(/\/+$/, "") + "/",

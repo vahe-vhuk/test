@@ -5,6 +5,7 @@ import "react-quill-new/dist/quill.snow.css";
 function ArticleEditor({ onPublish, initialTitle = "", initialContent = "" }) {
 	const [title, setTitle] = useState(initialTitle);
 	const [content, setContent] = useState(initialContent);
+	const [author, setAuthor] = useState("");
 	const [submitting, setSubmitting] = useState(false);
 	const [error, setError] = useState("");
 	const [success, setSuccess] = useState("");
@@ -48,16 +49,30 @@ function ArticleEditor({ onPublish, initialTitle = "", initialContent = "" }) {
 			setSuccess("");
 			if (!title.trim()) {
 				setError("Title is required.");
+				setSubmitting(false);
+				return;
+			}
+			if (!author.trim()) {
+				setError("Author is required.");
+				setSubmitting(false);
 				return;
 			}
 			if (!content || !content.trim()) {
 				setError("Content is required.");
+				setSubmitting(false);
 				return;
 			}
-			await onPublish?.({ title: title.trim(), content, author: "Admin" });
+			const publishDate = new Date().toISOString();
+			await onPublish?.({
+				title: title.trim(),
+				content,
+				author: author.trim(),
+				publish_date: publishDate,
+			});
 			setSuccess("Article published successfully.");
 			setTitle("");
 			setContent("");
+			setAuthor("");
 		} catch (e) {
 			console.error("Publish article failed:", e);
 			setError(e?.message || "Failed to publish article");
@@ -82,6 +97,19 @@ function ArticleEditor({ onPublish, initialTitle = "", initialContent = "" }) {
 						onChange={(e) => setTitle(e.target.value)}
 						placeholder="Enter title"
 						disabled={submitting}
+						required
+					/>
+				</div>
+				<div className="form-row">
+					<label htmlFor="article-author">Author</label>
+					<input
+						id="article-author"
+						type="text"
+						value={author}
+						onChange={(e) => setAuthor(e.target.value)}
+						placeholder="Enter author name"
+						disabled={submitting}
+						required
 					/>
 				</div>
 				<div className="form-row">
