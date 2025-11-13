@@ -1,5 +1,7 @@
 import React, { useContext, useMemo, useState } from "react";
 import { DataContext } from "../context/DataContext";
+import ArticleEditor from "../components/ArticleEditor";
+import { createArticle } from "../services/api";
 
 function Admin() {
   const { analytics, courses, setCourses, articles, setArticles } = useContext(DataContext);
@@ -102,6 +104,12 @@ function Admin() {
           </div>
         </div>
       </section>
+
+      <ArticleEditor
+        onPublish={async ({ title, content, author }) => {
+          await createArticle({ title, content, author });
+        }}
+      />
 
       <section className="card" style={{ maxWidth: 1000, width: "100%", margin: "0 auto", textAlign: "left" }}>
         <h2>Manage Courses</h2>

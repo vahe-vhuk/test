@@ -61,13 +61,17 @@ function ArticleDetails() {
 
   return (
     <main className="main" style={{ flexDirection: "column", alignItems: "center" }}>
-      <section className="card" style={{ maxWidth: 800, width: "100%", textAlign: "left" }}>
+      <section className="card" style={{ maxWidth: 900, width: "100%", textAlign: "left" }}>
         <h2>{article.title}</h2>
         <p style={{ color: "#bdbdbd", marginTop: 8 }}>
-          {article.author ? `By ${article.author} • ` : null}
-          {article.date}
+          {article.author ? `By ${article.author}` : null}
+          {article.date ? (article.author ? " • " : "") + article.date : null}
         </p>
-        <p style={{ marginTop: 16 }}>{article.content}</p>
+        <div
+          className="article-content"
+          style={{ marginTop: 16 }}
+          dangerouslySetInnerHTML={{ __html: article.content }}
+        />
       </section>
     </main>
   );

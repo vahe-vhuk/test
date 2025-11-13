@@ -275,3 +275,41 @@ body {
   background: #2f80ed;
   border-color: #2f80ed;
 }
+
+/* Article content responsive media */
+.article-content img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 16px 0;
+  border-radius: 6px;
+}
+.article-content iframe,
+.article-content video {
+  max-width: 100%;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  height: auto;
+  display: block;
+  margin: 16px 0;
+  border: none;
+  border-radius: 6px;
+  background: #000;
+}
+
+/* ReactQuill tweaks to fit theme */
+.article-editor-wrapper .ql-toolbar.ql-snow {
+  border-color: #333;
+  background: #111;
+}
+.article-editor-wrapper .ql-container.ql-snow {
+  border-color: #333;
+}
+.article-editor-wrapper .ql-editor {
+  min-height: 240px;
+  color: #e0e0e0;
+}
+.article-editor-wrapper .ql-editor a {
+  color: #2f80ed;
+  text-decoration: underline;
+}

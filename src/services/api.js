@@ -82,4 +82,15 @@ export async function createEnrollment(data) {
 	}
 }
 
+export async function createArticle(data) {
+	try {
+		const res = await api.post("articles", data);
+		return res.data;
+	} catch (err) {
+		const info = extractError(err);
+		console.error("createArticle error:", info, err);
+		throw info;
+	}
+}
+
 
